@@ -1,0 +1,84 @@
+/**
+ * @ClassName: Process
+ * @Auther: zhao
+ * @Date: 2020/12/25 12:06
+ * @Description:
+ */
+
+import cmd.*;
+
+/**
+ * @ClassName: Process
+ * @Auther: zhao
+ * @Date: 2020/12/25 12:06
+ * @Description:
+ */
+public class Process {
+    private comp comp_;
+    private copy copy_;
+    private del del_;
+    private dir dir_;
+    private help help_;
+    private type type_;
+    private static String[] supportCmds = {"dir","copy","del","type","comp","help",};
+
+    public Process() {
+        comp_ = new comp();
+        copy_ = new copy();
+        del_ = new del();
+        dir_ = new dir();
+        help_= new help();
+        type_ =new type();
+    }
+
+    public static int findCmd(String c){
+        int index = -1;
+        for(int i=0; i<supportCmds.length; i++){
+            if(c.equalsIgnoreCase(supportCmds[i])){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+    public String process(String context, String classpath){
+        String backcomment = "";
+        String [] args = context.split("\\s+");
+        classpath  = classpath.substring(0, classpath.length()-1);
+        //args[0] = args[0].substring(0, args[0].length()-1);
+        //System.out.println(context);
+        //System.out.println(classpath);
+        //for(String ss : args){
+          //  System.out.println(ss);
+        //}
+        int cmdindex = findCmd(args[0]);
+        if(cmdindex != -1){
+            switch (cmdindex){
+                case 0:
+                    backcomment = dir_.dir_(args, classpath);
+                break;
+                /*
+                case 1: backcomment = copy_.copy_(args, classpath);
+                break;
+                case 3: backcomment = type_.type_(args, classpath);
+                break;
+                case 4: backcomment = comp_.comp_(args, classpath);
+                break;
+                case 5: backcomment = help_.help_(args, classpath);
+                break;
+                */
+
+            }
+        }
+        else if(args[0].trim().isEmpty()){
+            return "";
+        }
+        else{
+            //System.out.println("1111"+args[0]);
+            //System.out.println("111");
+            backcomment = args[0]+"不是内部或外部命令，也不是可运行的程序\n" +
+                    "或批处理文件";
+        }
+        return backcomment;
+    }
+}
