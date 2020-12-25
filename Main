@@ -1,0 +1,19 @@
+/**
+ * @ClassName: Main
+ * @Auther: zhao
+ * @Date: 2020/12/25 08:32
+ * @Description:
+ */
+
+/**
+ * @ClassName: Main
+ * @Auther: zhao
+ * @Date: 2020/12/25 08:32
+ * @Description:
+ */
+public class Main {
+    public static void main(String[] args) {
+        MyJrame myJrame = new MyJrame();
+        myJrame.init();
+    }
+}
