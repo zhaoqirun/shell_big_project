@@ -1,0 +1,88 @@
+/**
+ * @ClassName: MyJrame
+ * @Auther: zhao
+ * @Date: 2020/12/25 08:14
+ * @Description:
+ */
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+/**
+ * @ClassName: MyJrame
+ * @Auther: zhao
+ * @Date: 2020/12/25 08:14
+ * @Description:
+ */
+public class MyJrame{
+    private String context = "";
+    private String classpath  =  "C:\\Users\\zhao>";
+    private String first = "";
+    private String second = "";
+    private int length = classpath.length();
+    public void init(){
+        JFrame jf = new JFrame("shell");
+        jf.setSize(1200, 700);
+        jf.setLocationRelativeTo(null);
+        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        // 创建文本区域组件
+        JTextArea textArea = new JTextArea();
+        textArea.setLineWrap(true);                         // 自动换行
+        textArea.setFont(new Font(null, Font.PLAIN, 18));   // 设置字体
+        textArea.append(classpath);
+        textArea.setCaretPosition(classpath.length());
+        first = classpath;
+
+        //创建事件监听对象
+        textArea.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                textArea.setEditable(true);
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    second = textArea.getText();
+                    context = second.substring(first.length(), second.length()); ////context 就是命令
+                    //System.out.println(context);
+                    //System.out.println(classpath);
+                    //后面处理，解析命令
+                    System.out.println(context);
+                     ////过滤掉空按enter键的情况
+                    String s = Process(context, classpath);
+                       // System.out.println(s);
+                    textArea.append("\r\n" + s);
+                    //重新打印命令行
+                    textArea.append("\r\n"+classpath);
+                    first = textArea.getText();
+                    length = first.length();
+                    textArea.setCaretPosition(textArea.getDocument().getLength());
+                }
+
+
+                else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+
+                    if(textArea.getText().length() <= length ){
+                        textArea.setEditable(false);
+                    }
+                }
+
+            }
+        });
+        // 创建滚动面板, 指定滚动显示的视图组件(textArea), 垂直滚动条一直显示, 水平滚动条从不显示
+        JScrollPane scrollPane = new JScrollPane(
+                textArea,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
+
+        jf.setContentPane(scrollPane);
+        jf.setVisible(true);
+    }
+
+    private String Process(String ss, String classpath) {
+        Process pr = new Process();
+        return pr.process(ss, classpath);
+    }
+
+}
