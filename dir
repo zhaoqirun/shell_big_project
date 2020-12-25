@@ -1,0 +1,64 @@
+package cmd;/**
+ * @ClassName: dir
+ * @Auther: zhao
+ * @Date: 2020/12/25 12:58
+ * @Description:
+ */
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * @ClassName: dir
+ * @Auther: zhao
+ * @Date: 2020/12/25 12:58
+ * @Description:
+ */
+public class dir {
+    public String dir_(String[] args, String classpath){
+        String ss = "";///存储命令返回的结果
+        File currentdir;///创建文件对象
+        String filename;///文件路径保存，用于创建对象
+        int fcount = 0;
+        /////
+        if(args.length == 1){
+            filename = classpath;
+        }
+        else{
+            filename = args[1];
+        }
+
+        currentdir = new File(filename);
+        SimpleDateFormat datefmt = new SimpleDateFormat("yyyy/MM/dd   HH:mm");///时间格式
+
+        if(currentdir.isDirectory()){
+            String[] mydirs = currentdir.list();
+            for(int i=0; i<mydirs.length; i++){
+                File mfile = new File( filename + "/" + mydirs[i]);
+                Date mtime = new Date(mfile.lastModified());
+                ss+=datefmt.format(mtime);
+
+                if(mfile.isFile()){
+                    ss+="\t\t";
+                    ss+=mfile.length()+"\t"+mydirs[i]+"\r\n";
+                    fcount++;
+                }
+                else{
+                    ss+="\t<DIR>\t";
+                    ss+="\t"+mydirs[i]+"\r\n";
+                }
+            }
+        }
+        else{
+            fcount++;
+            Date mtime = new Date(currentdir.lastModified());
+            ss+=datefmt.format(mtime);
+            ss+="\t\t";
+            ss+=currentdir.length()+"\t"+currentdir.getName();
+            ss+="\r\n";
+        }
+        ss+="文件数" + fcount;
+        return ss;
+    }
+}
